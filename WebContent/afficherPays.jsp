@@ -26,7 +26,7 @@
 				<tr>
 					<td>${item.nomPays}</td>
 				    <td>${item.nomCapitale}</td>
-				    <td>${item.nbHabitants}</td>
+				    <td>${item.nbHabitant}</td>
 				    <td><a href="Controleur?action=afficherPaysCarte&nomPays=${item.nomPays}">Afficher sur la carte</a>
 				</tr>
 				</c:forEach>

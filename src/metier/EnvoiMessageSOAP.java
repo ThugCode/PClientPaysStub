@@ -91,7 +91,7 @@ public class EnvoiMessageSOAP {
 	// Envoi du message
 	// dans le cas d'un message synchrone, l'envoi et la réception s'effectuent
 	// en une seule étape.
-	public void EmmissionReception(String destination, String operation)
+	public Object EmmissionReception(String destination, String operation)
 	{
 		try {
 			// On contrôle l'entrée
@@ -154,8 +154,12 @@ public class EnvoiMessageSOAP {
 			System.out.println();
 			// on ferme la connexion
 			connection.close();
+			
+			return listePays;
+			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+		return null;
 	}
 }

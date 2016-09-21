@@ -16,23 +16,33 @@ public class PaysService {
 	
 	public List<Pays> listePays() {
 		operation = "getTousLesPays";
+		
+		List<Pays> listePays = null;
+		
 		try {
 			unAppel.connexion();
 			unAppel.creationMessage(operation, destination);
-			unAppel.EmmissionReception(destenvoi, operation);
+			listePays = (List<Pays>) unAppel.EmmissionReception(destenvoi, operation);
 		} catch(Exception e){
 			System.out.println(e.getMessage());
 		}
+		
+		return listePays;
 	}
 	
 	public Pays getPays(String nomPays) {
 		operation = "getUnPays";
+		
+		Pays pays = null;
+		
 		try {
 			unAppel.connexion();
 			unAppel.creationMessage(operation, destination);
-			unAppel.EmmissionReception(destenvoi, operation);
+			pays = (Pays)unAppel.EmmissionReception(destenvoi, operation);
 		} catch(Exception e){
 			System.out.println(e.getMessage());
 		}
+		
+		return pays;
 	}
 }
