@@ -1,7 +1,6 @@
 package controleur;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -11,7 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import service.WebServicesStub;
+import metier.Pays;
+import service.PaysService;
 
 @WebServlet("/Controleur")
 public class Controleur extends HttpServlet {
@@ -29,48 +29,28 @@ public class Controleur extends HttpServlet {
 		
 		if (AFFICHER_PAYS.equals(actionName)) {
 			request.setAttribute("affichageListe", 1);
-			//SOAPReader reader = new SOAPReader();
-			//List<Pays> listePays = reader.getPays();
 			
-			// on se connecte au stub
-			WebServicesStub unStub = new WebServicesStub();
-			// on d�finit une r�f�rence sur la m�thode � appeler
-			WebServicesStub.GetTousLesPays mesPays = new WebServicesStub.GetTousLesPays();
-			// on d�nit un objet pour r�cup�rer les donn�es de la m�thode getTousLesPays ()
-			WebServicesStub.GetTousLesPaysResponse sr; 
-			// On construit une collection avec le type fourni par le web service
-			List<service.WebServicesStub.Pays> listePays = new ArrayList<service.WebServicesStub.Pays>();
-			// On construit une r�f�rence sur la m�thode getTousLesPays ()
-			sr = unStub.getTousLesPays(mesPays);
-			// On r�cup�re les donn�es dans un tableau 
-			service.WebServicesStub.Pays[]  tabPays = sr.get_return();
-			// contr�le des donn�es 
-			System.out.println("pays : " +tabPays[0].getNomPays());
-		     // on transforme en liste 
-			for ( int i=0; i < tabPays.length;i++)
-			{
-				listePays.add(tabPays[i]);
+			PaysService service = new PaysService();
+			
+			List<Pays> listePays = service.listePays();
+			
+			for(int i = 0; i < listePays.size(); i++){
+				System.out.println("pays :" + listePays.get(i).getNomPays());
 			}
+			
 			request.setAttribute("liste", listePays);
 			destinationPage = "/afficherPays.jsp";
 		
 		} else if (AFFICHER_PAYS_CARTE.equals(actionName)) {
 			
 			String nomPays = request.getParameter("nomPays");
-			// on se connecte au stub
-			WebServicesStub unStub = new WebServicesStub();
-			// on d�finit une r�f�rence sur la m�thode � appeler
-			WebServicesStub.GetUnPays unPays = new WebServicesStub.GetUnPays();
-			// on d�nit un objet pour r�cup�rer les donn�es de la m�thode getUnPays()
-			WebServicesStub.GetUnPaysResponse sr; 
-			// On passe le param�tre 
-			unPays.setNomPays(nomPays);
-			// construit une r�f�rence sur la m�thode getUnPays()
-			sr= unStub.getUnPays(unPays);
-			// On r�cup�re les donn�es dans un tableau 
-			service.WebServicesStub.Pays  lePays = sr.get_return();
-			System.out.println("pays : " + lePays.getNomPays());
-			request.setAttribute("pays", lePays);
+			
+			PaysService service = new PaysService();
+			
+			Pays pays = service.getPays(nomPays);
+			
+			System.out.println("pays : " + pays.getNomPays());
+			request.setAttribute("pays", pays);
 			
 			destinationPage = "/afficherPaysCarte.jsp";
 		} else if (CHERCHE_PAYS.equals(actionName)) {
