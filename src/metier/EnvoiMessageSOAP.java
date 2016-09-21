@@ -1,18 +1,32 @@
 package metier;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.xml.namespace.QName;
-import javax.xml.soap.SOAPConnectionFactory;
-import javax.xml.soap.SOAPConnection;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.soap.MessageFactory;
+import javax.xml.soap.SOAPBody;
+import javax.xml.soap.SOAPConnection;
+import javax.xml.soap.SOAPConnectionFactory;
+import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
-import javax.xml.soap.SOAPEnvelope;
-import javax.xml.soap.SOAPBody;
-import javax.xml.soap.SOAPElement;
-import javax.xml.transform.*;
-import javax.xml.transform.stream.*;
-import java.util.Iterator;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class EnvoiMessageSOAP {
 
@@ -41,12 +55,12 @@ public class EnvoiMessageSOAP {
 		}
 	}
 
-	// Cr�ation de l�objet message
-	// On construit les diff�rentes parties du message SOAP
-	// Il est possible de cr�er le message � partir d�un fichier externe.
-	// Cr�ation de l�objet message
-	// On construit les diff�rentes parties du message SOAP
-	// Il est possible de cr�er le message � partir d�un fichier externe.
+	// Création de l'objet message
+	// On construit les différentes parties du message SOAP
+	// Il est possible de créer le message à partir d'un fichier externe.
+	// Création de l'objet message
+	// On construit les différentes parties du message SOAP
+	// Il est possible de créer le message à partir d'un fichier externe.
 	public void creationMessage(String operation, String destination) {
 		try {
 			messageFactory = MessageFactory.newInstance();
@@ -54,15 +68,14 @@ public class EnvoiMessageSOAP {
 			soapPart = message.getSOAPPart();
 			envelope = soapPart.getEnvelope();
 			body = envelope.getBody();
-			// On cr�e l'�l�ment principal et le namespace'
+			// On crée l'élément principal et le namespace'
 			QName bodyName = new QName(destination, operation, "m");
-			// On cr�e l�enveloppe
+			// On crée l'enveloppe
 			bodyElement = body.addBodyElement(bodyName);
-			// On passe les param�tres
-			QName qn1 = new QName("opera");
-			bodyElement.addChildElement(qn1).addTextNode(Float.toString(a));
-			QName qn2 = new QName("operb");
-			bodyElement.addChildElement(qn2).addTextNode(Float.toString(b));
+			// On passe les paramêtres
+			//QName qn1 = new QName("opera");
+			//bodyElement.addChildElement(qn1).addTextNode(Float.toString(a));
+			
 			// On sauve le message
 			message.saveChanges();
 		} catch (Exception e) {
@@ -73,39 +86,64 @@ public class EnvoiMessageSOAP {
 	}
 
 	// Envoi du message
-	// dans le cas d�un message synchrone, l�envoi et la r�ception s�effectuent
-	// en une seule �tape.
+	// dans le cas d'un message synchrone, l'envoi et la réception s'effectuent
+	// en une seule étape.
 	// Envoi du message
-	// dans le cas d�un message synchrone, l�envoi et la r�ception s�effectuent
-	// en une seule �tape.
+	// dans le cas d'un message synchrone, l'envoi et la réception s'effectuent
+	// en une seule étape.
 	public void EmmissionReception(String destination, String operation)
-	// Les param�tres float a, float b et int oper
-	// ne servent que pour l�affichage des r�sultats
-	// Le message � �mettre contient :
-
 	{
 		try {
-			// On contr�le l'entr�e
+			// On contrôle l'entrée
 			System.out.println("\nENVOI:\n");
 			message.writeTo(System.out);
 			System.out.println();
-			// On envoie le message et on attend la r�ponse
-			// On d�finit la destination
+			// On envoie le message et on attend la rééponse
+			// On définit la destination
 			// On envoie le message
 			SOAPMessage reply = connection.call(message, destination);
-			// traitement de la r�ponse
-			// On contr�le la sortie
+			// traitement de la réponse
+			// On contrôle la sortie
 			System.out.println("\nREQUEST:\n");
 			soapPart = reply.getSOAPPart();
 			envelope = soapPart.getEnvelope();
 			body = envelope.getBody();
-			// on examine les �l�ments renvoy�s dans une liste
+			
+			Node firstchild = body.getFirstChild();
+			NodeList listeNoeud = firstchild.getChildNodes();
+			
+			List<Pays> listePays = new ArrayList<Pays>();
+			
+			for(int i=0; i<listeNoeud.getLength(); i++) {
+				Node n = listeNoeud.item(i);
+				NodeList l = n.getChildNodes();
+				
+				Node nbHNode = l.item(0);
+				int nbH = Integer.parseInt(nbHNode.getTextContent());
+				
+				Node nomCapitaleNode = l.item(1);
+				String nomCapitale = nomCapitaleNode.getTextContent();
+				
+				Node nomPaysNode = l.item(2);
+				String nomPays = nomPaysNode.getTextContent();
+				
+				Pays pays = new Pays(nomPays, nomCapitale, nbH);
+				
+				listePays.add(pays);
+			}
+
+			for(Pays tata : listePays) {
+				System.out.println(tata.getNomPays()+" ("+tata.getNomCapitale()+" : "+tata.getNbHabitant()+")");
+			}
+			
+			// on examine les éléments renvoyés dans une liste
 			Iterator iter = body.getChildElements();
 			Node resultOuter = ((Node) iter.next()).getFirstChild();
 			Node result = resultOuter.getFirstChild();
-			// on affiche le r�sultat
+			// on affiche le résultat
 			System.out.println(operation + " : " + result.getNodeValue());
-			// on cr�e le transformeur pour visualiser le message
+			
+			// on crée le transformeur pour visualiser le message
 			transformerFactory = TransformerFactory.newInstance();
 			transformer = transformerFactory.newTransformer();
 			// On extrait le contenu du corps BODY
