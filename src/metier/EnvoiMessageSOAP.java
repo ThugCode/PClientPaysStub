@@ -1,14 +1,10 @@
 package metier;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPConnection;
@@ -20,14 +16,15 @@ import javax.xml.soap.SOAPPart;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
+/***
+ * Classe de d'interaction SOAP
+ * @author LETOURNEUR - GERLAND
+ *
+ */
 public class EnvoiMessageSOAP {
 
 	private SOAPConnection connection;
@@ -41,125 +38,177 @@ public class EnvoiMessageSOAP {
 	private TransformerFactory transformerFactory;
 	private Transformer transformer;
 	private Source sourceContent;
-
-	// fonction connexion
-
-	// on construit une connexion
+	
 	public void connexion() {
 		try {
-
 			soapConnFactory = SOAPConnectionFactory.newInstance();
 			connection = soapConnFactory.createConnection();
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
+			
+		} catch (Exception e) { System.out.println(e.getMessage());}
 	}
 
-	// Création de l'objet message
-	// On construit les différentes parties du message SOAP
-	// Il est possible de créer le message à partir d'un fichier externe.
-	// Création de l'objet message
-	// On construit les différentes parties du message SOAP
-	// Il est possible de créer le message à partir d'un fichier externe.
-	public void creationMessage(String operation, String destination) {
+	/***
+	 * Création de l'objet message
+	 * On construit les différentes parties du message SOAP
+	 * Il est possible de créer le message à partir d'un fichier externe.
+	 * @param operation
+	 * @param param
+	 * @param destination
+	 */
+	public void creationMessage(String operation, String param, String destination) {
 		try {
+			//Construction du message
 			messageFactory = MessageFactory.newInstance();
 			message = messageFactory.createMessage();
 			soapPart = message.getSOAPPart();
 			envelope = soapPart.getEnvelope();
 			body = envelope.getBody();
-			// On crée l'élément principal et le namespace'
+			// Création de l'élément principal et du namespace
 			QName bodyName = new QName(destination, operation, "m");
-			// On crée l'enveloppe
+			// Création de l'enveloppe
 			bodyElement = body.addBodyElement(bodyName);
-			// On passe les paramêtres
-			//QName qn1 = new QName("opera");
-			//bodyElement.addChildElement(qn1).addTextNode(Float.toString(a));
-			
-			// On sauve le message
+			// Création des paramêtres
+			QName qn1 = new QName("search");
+			bodyElement.addChildElement(qn1).addTextNode(param);
+			// Sauvegarde du message
 			message.saveChanges();
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-
-		}
+			
+		} catch (Exception e) { System.out.println(e.getMessage()); }
 
 	}
 
-	// Envoi du message
-	// dans le cas d'un message synchrone, l'envoi et la réception s'effectuent
-	// en une seule étape.
-	// Envoi du message
-	// dans le cas d'un message synchrone, l'envoi et la réception s'effectuent
-	// en une seule étape.
+	/***
+	 * Envoi du message 
+	 * dans le cas d'un message synchrone, l'envoi 
+	 * et la réception s'effectuent en une seule étape.
+	 * @param destination
+	 * @param operation
+	 * @return
+	 */
 	public Object EmmissionReception(String destination, String operation)
 	{
+		
+		Object returnObject = null;
+		
 		try {
 			// On contrôle l'entrée
 			System.out.println("\nENVOI:\n");
 			message.writeTo(System.out);
 			System.out.println();
-			// On envoie le message et on attend la rééponse
-			// On définit la destination
-			// On envoie le message
+			// On envoie le message en définissant la destination
 			SOAPMessage reply = connection.call(message, destination);
-			// traitement de la réponse
-			// On contrôle la sortie
+			// Traitement de la réponse en contrôlant la sortie
 			System.out.println("\nREQUEST:\n");
 			soapPart = reply.getSOAPPart();
 			envelope = soapPart.getEnvelope();
 			body = envelope.getBody();
 			
-			Node firstchild = body.getFirstChild();
-			NodeList listeNoeud = firstchild.getChildNodes();
-			
-			List<Pays> listePays = new ArrayList<Pays>();
-			
-			for(int i=0; i<listeNoeud.getLength(); i++) {
-				Node n = listeNoeud.item(i);
-				NodeList l = n.getChildNodes();
-				
-				Node nbHNode = l.item(0);
-				int nbH = Integer.parseInt(nbHNode.getTextContent());
-				
-				Node nomCapitaleNode = l.item(1);
-				String nomCapitale = nomCapitaleNode.getTextContent();
-				
-				Node nomPaysNode = l.item(2);
-				String nomPays = nomPaysNode.getTextContent();
-				
-				Pays pays = new Pays(nomPays, nomCapitale, nbH);
-				
-				listePays.add(pays);
-			}
-
-			for(Pays tata : listePays) {
-				System.out.println(tata.getNomPays()+" ("+tata.getNomCapitale()+" : "+tata.getNbHabitant()+")");
-			}
-			
-			// on examine les éléments renvoyés dans une liste
+			// Eléments renvoyés dans une liste
 			Iterator iter = body.getChildElements();
 			Node resultOuter = ((Node) iter.next()).getFirstChild();
 			Node result = resultOuter.getFirstChild();
-			// on affiche le résultat
-			System.out.println(operation + " : " + result.getNodeValue());
+			// Affichage du résultat
+			System.out.println(operation.toUpperCase());
+						
+			if(operation.equals("getTousLesPays")) {
+				Node firstchild = body.getFirstChild();
+				NodeList listeNoeud = firstchild.getChildNodes();
+				
+				List<Pays> listePays = new ArrayList<Pays>();
+				
+				for(int i=0; i<listeNoeud.getLength(); i++) {
+					Node n = listeNoeud.item(i);
+					NodeList l = n.getChildNodes();
+					
+					Node nbHNode = l.item(0);
+					int nbH = Integer.parseInt(nbHNode.getTextContent());
+					
+					Node nomCapitaleNode = l.item(1);
+					String nomCapitale = nomCapitaleNode.getTextContent();
+					
+					Node nomPaysNode = l.item(2);
+					String nomPays = nomPaysNode.getTextContent();
+					
+					Pays pays = new Pays(nomPays, nomCapitale, nbH);
+					
+					listePays.add(pays);
+				}
+				
+				returnObject =  listePays;
+			}
+			else if (operation.equals("searchPays")) {
+				
+				Node firstchild = body.getFirstChild();
+				NodeList listeNoeud = firstchild.getChildNodes();
+				
+				Listerecherche liste = new Listerecherche();
+				
+				//Pays
+				Node n = listeNoeud.item(0);
+				NodeList l = n.getChildNodes();
+				
+				for(int i=0; i<l.getLength(); i++) {
+					Node m = l.item(i);
+					NodeList p = m.getChildNodes();
+				
+					Node nbHNode = p.item(0);
+					int nbH = Integer.parseInt(nbHNode.getTextContent());
+					
+					Node nomCapitaleNode = p.item(1);
+					String nomCapitale = nomCapitaleNode.getTextContent();
+					
+					Node nomPaysNode = p.item(2);
+					String nomPays = nomPaysNode.getTextContent();
+					
+					Pays pays = new Pays(nomPays, nomCapitale, nbH);
+					
+					liste.getRetourPays().add(pays);
+				}
+				
+				//Ville
+				n = listeNoeud.item(1);
+				l = n.getChildNodes();
+				
+				for(int i=0; i<l.getLength(); i++) {
+					Node m = l.item(i);
+					NodeList p = m.getChildNodes();
+				
+					Node nbHNode = p.item(0);
+					int nbH = Integer.parseInt(nbHNode.getTextContent());
+					
+					Node nomCapitaleNode = p.item(1);
+					String nomCapitale = nomCapitaleNode.getTextContent();
+					
+					Node nomPaysNode = p.item(2);
+					String nomPays = nomPaysNode.getTextContent();
+					
+					Pays pays = new Pays(nomPays, nomCapitale, nbH);
+					
+					liste.getRetourVille().add(pays);
+				}
+				
+				returnObject = liste;
+				
+				System.out.println(returnObject);
+			}
+			
 			
 			// on crée le transformeur pour visualiser le message
-			transformerFactory = TransformerFactory.newInstance();
-			transformer = transformerFactory.newTransformer();
+			//transformerFactory = TransformerFactory.newInstance();
+			//transformer = transformerFactory.newTransformer();
 			// On extrait le contenu du corps BODY
-			sourceContent = reply.getSOAPPart().getContent();
+			//sourceContent = reply.getSOAPPart().getContent();
 			// Sortie de la transformation
-			StreamResult unresult = new StreamResult(System.out);
-			transformer.transform(sourceContent, unresult);
-			System.out.println();
+			//StreamResult unresult = new StreamResult(System.out);
+			//transformer.transform(sourceContent, unresult);
+			
 			// on ferme la connexion
 			connection.close();
-			
-			return listePays;
 			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		return null;
+		
+		return returnObject;
 	}
 }

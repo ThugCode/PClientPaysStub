@@ -3,7 +3,7 @@
 		<header>
 			Accueil
 			<a href="Controleur?action=afficherPays">Affichage liste des pays</a>
-			<form class="ajax" method="get" action="GestRecherche.jsp">          
+			<form class="ajax" method="get" action="Controleur?action=cherchePays">          
 	        	<input id="q" class="rech" type="text" autocomplete="off" name="q" placeholder="Rechercher" on/>
 	        	<input id="selectionne" type="hidden" name="selectionne" value="1" size="2"/>
 	        	<input type="submit" style="display: none;" value="valider"/>

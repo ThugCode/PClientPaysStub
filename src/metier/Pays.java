@@ -1,16 +1,10 @@
 package metier;
 
-import java.awt.*;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
-import java.util.*;
-import java.util.List;
-
-import meserreurs.MonException;
-
-
+/***
+ * Classe de service Client
+ * @author LETOURNEUR - GERLAND
+ *
+ */
 public class Pays {
 
     private String nomPays;
