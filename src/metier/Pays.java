@@ -42,4 +42,9 @@ public class Pays {
 	public void setNbHabitant(int nbHabitant) {
 		this.nbHabitant = nbHabitant;
 	}
+	
+	public String toString() {
+		return "Pays : "+nomPays+" ("+nomCapitale+":"+nbHabitant+")";
+		
+	}
 }

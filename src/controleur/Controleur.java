@@ -42,8 +42,6 @@ public class Controleur extends HttpServlet {
 		String destinationPage = ERROR_PAGE;
 		String actionName = request.getParameter(ACTION_TYPE);
 		
-		System.out.println("lourd");
-		
 		if (AFFICHER_PAYS.equals(actionName)) {
 			
 			PaysService service = new PaysService();
@@ -74,8 +72,6 @@ public class Controleur extends HttpServlet {
 			Listerecherche listeRecherche = service.searchPays(q);
 			
 			request.setAttribute("listeRecherche", listeRecherche);
-			
-			System.out.println(listeRecherche);
 			
 			destinationPage = "/GestRecherche.jsp";
 		}

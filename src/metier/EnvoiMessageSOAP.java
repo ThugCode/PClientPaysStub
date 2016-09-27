@@ -16,6 +16,7 @@ import javax.xml.soap.SOAPPart;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -188,19 +189,17 @@ public class EnvoiMessageSOAP {
 				}
 				
 				returnObject = liste;
-				
-				System.out.println(returnObject);
 			}
 			
 			
 			// on crée le transformeur pour visualiser le message
-			//transformerFactory = TransformerFactory.newInstance();
-			//transformer = transformerFactory.newTransformer();
+			transformerFactory = TransformerFactory.newInstance();
+			transformer = transformerFactory.newTransformer();
 			// On extrait le contenu du corps BODY
-			//sourceContent = reply.getSOAPPart().getContent();
+			sourceContent = reply.getSOAPPart().getContent();
 			// Sortie de la transformation
-			//StreamResult unresult = new StreamResult(System.out);
-			//transformer.transform(sourceContent, unresult);
+			StreamResult unresult = new StreamResult(System.out);
+			transformer.transform(sourceContent, unresult);
 			
 			// on ferme la connexion
 			connection.close();
