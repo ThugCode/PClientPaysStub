@@ -1,9 +1,9 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import metier.EnvoiMessageSOAP;
-import metier.Listerecherche;
 import metier.Pays;
 
 /***
@@ -62,15 +62,15 @@ public class PaysService {
 	 * Appel de l'opération searchPays
 	 * @return
 	 */
-	public Listerecherche searchPays(String search) {
+	public ArrayList<Pays> searchPays(String search) {
 		operation = "searchPays";
 		
-		Listerecherche liste = null;
+		ArrayList<Pays> liste = null;
 		
 		try {
 			unAppel.connexion();
 			unAppel.creationMessage(operation, search, destination);
-			liste = (Listerecherche) unAppel.EmmissionReception(destenvoi, operation);
+			liste = (ArrayList<Pays>) unAppel.EmmissionReception(destenvoi, operation);
 		} catch(Exception e){
 			System.out.println(e.getMessage());
 		}

@@ -1,6 +1,7 @@
 package controleur;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -69,7 +70,14 @@ public class Controleur extends HttpServlet {
 			
 			PaysService service = new PaysService();
 			
-			Listerecherche listeRecherche = service.searchPays(q);
+			ArrayList<Pays> liste = service.searchPays(q);
+			Listerecherche listeRecherche = new Listerecherche();
+			for(Pays node : liste) {
+				if(node.isRecherchePays())
+					listeRecherche.getRetourPays().add(node);
+				else
+					listeRecherche.getRetourVille().add(node);
+			}
 			
 			request.setAttribute("listeRecherche", listeRecherche);
 			

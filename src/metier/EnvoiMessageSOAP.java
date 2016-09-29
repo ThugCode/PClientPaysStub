@@ -104,10 +104,6 @@ public class EnvoiMessageSOAP {
 			envelope = soapPart.getEnvelope();
 			body = envelope.getBody();
 			
-			// Eléments renvoyés dans une liste
-			Iterator iter = body.getChildElements();
-			Node resultOuter = ((Node) iter.next()).getFirstChild();
-			Node result = resultOuter.getFirstChild();
 			// Affichage du résultat
 			System.out.println(operation.toUpperCase());
 						
@@ -130,7 +126,7 @@ public class EnvoiMessageSOAP {
 					Node nomPaysNode = l.item(2);
 					String nomPays = nomPaysNode.getTextContent();
 					
-					Pays pays = new Pays(nomPays, nomCapitale, nbH);
+					Pays pays = new Pays(nomPays, nomCapitale, nbH, false);
 					
 					listePays.add(pays);
 				}
@@ -142,14 +138,10 @@ public class EnvoiMessageSOAP {
 				Node firstchild = body.getFirstChild();
 				NodeList listeNoeud = firstchild.getChildNodes();
 				
-				Listerecherche liste = new Listerecherche();
+				ArrayList<Pays> liste = new ArrayList<Pays>();
 				
-				//Pays
-				Node n = listeNoeud.item(0);
-				NodeList l = n.getChildNodes();
-				
-				for(int i=0; i<l.getLength(); i++) {
-					Node m = l.item(i);
+				for(int i=0; i<listeNoeud.getLength(); i++) {
+					Node m = listeNoeud.item(i);
 					NodeList p = m.getChildNodes();
 				
 					Node nbHNode = p.item(0);
@@ -161,31 +153,12 @@ public class EnvoiMessageSOAP {
 					Node nomPaysNode = p.item(2);
 					String nomPays = nomPaysNode.getTextContent();
 					
-					Pays pays = new Pays(nomPays, nomCapitale, nbH);
+					Node recherchePaysNode = p.item(3);
+					String recherchePays = recherchePaysNode.getTextContent();
 					
-					liste.getRetourPays().add(pays);
-				}
-				
-				//Ville
-				n = listeNoeud.item(1);
-				l = n.getChildNodes();
-				
-				for(int i=0; i<l.getLength(); i++) {
-					Node m = l.item(i);
-					NodeList p = m.getChildNodes();
-				
-					Node nbHNode = p.item(0);
-					int nbH = Integer.parseInt(nbHNode.getTextContent());
+					Pays pays = new Pays(nomPays, nomCapitale, nbH, Boolean.parseBoolean(recherchePays));
 					
-					Node nomCapitaleNode = p.item(1);
-					String nomCapitale = nomCapitaleNode.getTextContent();
-					
-					Node nomPaysNode = p.item(2);
-					String nomPays = nomPaysNode.getTextContent();
-					
-					Pays pays = new Pays(nomPays, nomCapitale, nbH);
-					
-					liste.getRetourVille().add(pays);
+					liste.add(pays);
 				}
 				
 				returnObject = liste;
