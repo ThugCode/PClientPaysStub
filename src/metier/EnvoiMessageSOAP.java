@@ -1,8 +1,6 @@
 package metier;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.xml.namespace.QName;
 import javax.xml.soap.MessageFactory;
@@ -106,64 +104,34 @@ public class EnvoiMessageSOAP {
 			
 			// Affichage du résultat
 			System.out.println(operation.toUpperCase());
-						
-			if(operation.equals("getTousLesPays")) {
-				Node firstchild = body.getFirstChild();
-				NodeList listeNoeud = firstchild.getChildNodes();
 				
-				List<Pays> listePays = new ArrayList<Pays>();
-				
-				for(int i=0; i<listeNoeud.getLength(); i++) {
-					Node n = listeNoeud.item(i);
-					NodeList l = n.getChildNodes();
-					
-					Node nbHNode = l.item(0);
-					int nbH = Integer.parseInt(nbHNode.getTextContent());
-					
-					Node nomCapitaleNode = l.item(1);
-					String nomCapitale = nomCapitaleNode.getTextContent();
-					
-					Node nomPaysNode = l.item(2);
-					String nomPays = nomPaysNode.getTextContent();
-					
-					Pays pays = new Pays(nomPays, nomCapitale, nbH, false);
-					
-					listePays.add(pays);
-				}
-				
-				returnObject =  listePays;
-			}
-			else if (operation.equals("searchPays")) {
-				
-				Node firstchild = body.getFirstChild();
-				NodeList listeNoeud = firstchild.getChildNodes();
-				
-				ArrayList<Pays> liste = new ArrayList<Pays>();
-				
-				for(int i=0; i<listeNoeud.getLength(); i++) {
-					Node m = listeNoeud.item(i);
-					NodeList p = m.getChildNodes();
-				
-					Node nbHNode = p.item(0);
-					int nbH = Integer.parseInt(nbHNode.getTextContent());
-					
-					Node nomCapitaleNode = p.item(1);
-					String nomCapitale = nomCapitaleNode.getTextContent();
-					
-					Node nomPaysNode = p.item(2);
-					String nomPays = nomPaysNode.getTextContent();
-					
-					Node recherchePaysNode = p.item(3);
-					String recherchePays = recherchePaysNode.getTextContent();
-					
-					Pays pays = new Pays(nomPays, nomCapitale, nbH, Boolean.parseBoolean(recherchePays));
-					
-					liste.add(pays);
-				}
-				
-				returnObject = liste;
-			}
+			Node firstchild = body.getFirstChild();
+			NodeList listeNoeud = firstchild.getChildNodes();
 			
+			ArrayList<Pays> liste = new ArrayList<Pays>();
+			
+			for(int i=0; i<listeNoeud.getLength(); i++) {
+				Node m = listeNoeud.item(i);
+				NodeList p = m.getChildNodes();
+			
+				Node nbHNode = p.item(0);
+				int nbH = Integer.parseInt(nbHNode.getTextContent());
+				
+				Node nomCapitaleNode = p.item(1);
+				String nomCapitale = nomCapitaleNode.getTextContent();
+				
+				Node nomPaysNode = p.item(2);
+				String nomPays = nomPaysNode.getTextContent();
+				
+				Node recherchePaysNode = p.item(3);
+				String recherchePays = recherchePaysNode.getTextContent();
+				
+				Pays pays = new Pays(nomPays, nomCapitale, nbH, Boolean.parseBoolean(recherchePays));
+				
+				liste.add(pays);
+			}
+				
+			returnObject = liste;
 			
 			// on crée le transformeur pour visualiser le message
 			transformerFactory = TransformerFactory.newInstance();

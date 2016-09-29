@@ -2,18 +2,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
 
 <c:import url="entete.jsp" />
-		<header>
-			<a href="index.jsp">Accueil</a>
-			<a href="Controleur?action=afficherPays">Afficher la liste des pays</a>
-			<form class="ajax" method="get" action="GestRecherche.jsp">          
-	        	<input id="q" class="rech" type="text" autocomplete="off" name="q" placeholder="Rechercher" on/>
-	        	<input id="selectionne" type="hidden" name="selectionne" value="1" size="2"/>
-	        	<input type="submit" style="display: none;" value="valider"/>
-        	</form>
-        	<div id="results" class="results">
-        	</div>
-		</header>
-		<div class="corps2">
+		
+	<c:import url="header.jsp" />
+
+		<div class="corps">
 			<h1>Bienvenue</h1>
 			<div id="map-canvas" style="height: 500px; width: 96%; margin-left: 2%; margin-right: 2%; margin-bottom: 20px;"></div>
 			<a href="http://maps.apple.com/?q=${pays.nomCapitale},${pays.nomPays}">Ouvrir dans l'application</a><br/>

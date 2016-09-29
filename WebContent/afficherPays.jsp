@@ -1,21 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
 <c:import url="entete.jsp" />
-		<header>
-			<a href="index.jsp">Accueil</a>
-			Afficher la liste des stages
-			<form class="ajax" method="get" action="GestRecherche.jsp">          
-	        	<input id="q" class="rech" type="text" autocomplete="off" name="q" placeholder="Rechercher" on/>
-	        	<input id="selectionne" type="hidden" name="selectionne" value="1" size="2"/>
-	        	<input type="submit" style="display: none;" value="valider"/>
-        	</form>
-        	<div id="results" class="results">
-        	</div>
-		</header>
-		<div class="corps2">
-			<h1>Listing des Pays </h1>
-			<table border="1" align="center">
-				<caption> Tableau des Stages </caption>
+
+		<c:import url="header.jsp" />
+		
+		<div class="corps">
+			<h1>Listing des Pays</h1>
+			<table id="table_pays" align="center">
 				<tr>
 					<th> Nom des pays </th>
 					<th> Capitale </th>

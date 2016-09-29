@@ -81,7 +81,7 @@ public class Controleur extends HttpServlet {
 			
 			request.setAttribute("listeRecherche", listeRecherche);
 			
-			destinationPage = "/GestRecherche.jsp";
+			destinationPage = "/gestionRecherche.jsp";
 		}
 		
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(destinationPage);
