@@ -6,7 +6,8 @@
 	<c:import url="header.jsp" />
 
 		<div class="corps">
-			<h1>Bienvenue</h1>
+			<h1>${pays.nomPays}</h1>
+			<p>Capitale : ${pays.nomCapitale} / Nombre d'habitants : ${pays.nbHabitant}</p>
 			<div id="map-canvas" style="height: 500px; width: 96%; margin-left: 2%; margin-right: 2%; margin-bottom: 20px;"></div>
 			<a href="http://maps.apple.com/?q=${pays.nomCapitale},${pays.nomPays}">Ouvrir dans l'application</a><br/>
 		</div>
@@ -51,7 +52,7 @@
 
 
 		function creerInfoWindow() {
-			var contentS = "${pays.nomCapitale}, ${pays.nomPays}<br/>${pays.nbHabitants} habitants";
+			var contentS = "${pays.nomCapitale}, ${pays.nomPays}<br/>${pays.nbHabitant} habitants";
 			var infoWindows = new google.maps.InfoWindow({
 				content : contentS,
 				maxWidth : 200

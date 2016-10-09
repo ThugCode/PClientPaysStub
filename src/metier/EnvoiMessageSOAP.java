@@ -139,6 +139,7 @@ public class EnvoiMessageSOAP {
 			// On extrait le contenu du corps BODY
 			sourceContent = reply.getSOAPPart().getContent();
 			// Sortie de la transformation
+			System.out.println("\nREPONSE: \n");
 			StreamResult unresult = new StreamResult(System.out);
 			transformer.transform(sourceContent, unresult);
 			

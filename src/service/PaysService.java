@@ -46,11 +46,13 @@ public class PaysService {
 		operation = "getUnPays";
 		
 		Pays pays = null;
+		List<Pays> liste = null;
 		
 		try {
 			unAppel.connexion();
 			unAppel.creationMessage(operation, nomPays, destination);
-			pays = (Pays)unAppel.EmmissionReception(destenvoi, operation);
+			liste = (List<Pays>) unAppel.EmmissionReception(destenvoi, operation);
+			pays = liste.get(0);
 		} catch(Exception e){
 			System.out.println(e.getMessage());
 		}

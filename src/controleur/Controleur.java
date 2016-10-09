@@ -60,6 +60,7 @@ public class Controleur extends HttpServlet {
 			PaysService service = new PaysService();
 			Pays pays = service.getPays(nomPays);
 			
+			System.out.println("Pays : " + pays);
 			request.setAttribute("pays", pays);
 			
 			destinationPage = "/afficherPaysCarte.jsp";
