@@ -24,7 +24,7 @@ import org.w3c.dom.NodeList;
  * @author LETOURNEUR - GERLAND
  *
  */
-public class EnvoiMessageSOAP {
+public class MessageSOAP {
 
 	private SOAPConnection connection;
 	private SOAPConnectionFactory soapConnFactory;

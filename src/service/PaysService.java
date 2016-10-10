@@ -3,7 +3,7 @@ package service;
 import java.util.ArrayList;
 import java.util.List;
 
-import metier.EnvoiMessageSOAP;
+import metier.MessageSOAP;
 import metier.Pays;
 
 /***
@@ -15,7 +15,7 @@ public class PaysService {
 	
 	private static String destenvoi = "http://localhost:8080/PWSPays/services/WebServices";
 	private static String destination = "http://service"; // Nom du package
-	private static EnvoiMessageSOAP unAppel = new EnvoiMessageSOAP();
+	private static MessageSOAP unAppel = new MessageSOAP();
 	private String operation;
 	
 	/***
