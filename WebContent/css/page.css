@@ -141,6 +141,10 @@ div#results a:hover{
 	padding							: 2px;
 }
 
+#map-canvas {
+	border 							: 1ps solid blaéck;
+}
+
 @media screen and (max-width: 767px) and (orientation: portrait){
     
     img, table, td, blockquote, code, pre, textarea, input, object, embed, video {

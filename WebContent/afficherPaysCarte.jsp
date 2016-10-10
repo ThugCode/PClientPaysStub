@@ -7,7 +7,8 @@
 
 		<div class="corps">
 			<h1>${pays.nomPays}</h1>
-			<p>Capitale : ${pays.nomCapitale} / Nombre d'habitants : ${pays.nbHabitant}</p>
+			<p style="margin-left:15px">Capitale : ${pays.nomCapitale}</p>
+			<p style="margin-left:15px">Nombre d'habitants : ${pays.nbHabitant}</p>
 			<div id="map-canvas" style="height: 500px; width: 96%; margin-left: 2%; margin-right: 2%; margin-bottom: 20px;"></div>
 			<a href="http://maps.apple.com/?q=${pays.nomCapitale},${pays.nomPays}">Ouvrir dans l'application</a><br/>
 		</div>
